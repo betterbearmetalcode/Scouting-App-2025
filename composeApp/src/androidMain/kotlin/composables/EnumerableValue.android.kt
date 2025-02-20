@@ -16,10 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defaultOnPrimary
-import defaultSecondary
 import getCurrentTheme
+import nodes.hasDuplicateMatchandTeamData
+import nodes.overwritePopup
 import nodes.saveData
+import nodes.saveDataSit
+import nodes.saveDataSituation
 
 @Composable
 actual fun EnumerableValue(label: String, value: MutableIntState, flashColor: Color, alignment: Alignment, modifier: Modifier) {
@@ -34,7 +36,12 @@ actual fun EnumerableValue(label: String, value: MutableIntState, flashColor: Co
         colors = ButtonDefaults.buttonColors(containerColor = if(pressed) flashColor else Color.Black),
         onClick = {
             value.value += 1
-            saveData.value = true
+            saveDataSit.value = saveDataSituation.BUTTON
+            if(!hasDuplicateMatchandTeamData()) {
+                saveData.value = true
+            } else {
+                overwritePopup.value = true
+            }
         },
         interactionSource = interact,
         modifier = modifier

@@ -51,6 +51,7 @@ actual fun MainMenuAlertDialog(active: MutableState<Boolean>, bob: () -> Unit, t
                         active.value = false
 
                         if(!saveData.value) {
+                            println("data not save")
                             saveDataPopup.value = true
                         } else {
                             active.value = false

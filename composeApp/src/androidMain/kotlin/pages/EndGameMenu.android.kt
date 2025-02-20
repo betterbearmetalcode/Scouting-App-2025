@@ -41,12 +41,15 @@ import nodes.RootNode
 import nodes.TeamMatchStartKey
 import nodes.createOutput
 import nodes.deep
+import nodes.hasDuplicateMatchandTeamData
 import nodes.notes
+import nodes.overwritePopup
 import nodes.park
 import nodes.playedDefense
 import nodes.saveData
 import nodes.saveDataPopup
 import nodes.saveDataSit
+import nodes.saveDataSituation
 import nodes.shallow
 import nodes.teamDataArray
 import java.lang.Integer.parseInt
@@ -99,7 +102,12 @@ actual fun EndGameMenu(
                     onCheckedChange ={
                         playedDefense.value = !playedDefense.value
 
-                        saveData.value = true
+                        saveDataSit.value = saveDataSituation.BUTTON
+                        if(!hasDuplicateMatchandTeamData()) {
+                            saveData.value = true
+                        } else {
+                            overwritePopup.value = true
+                        }
                     },
                     modifier = Modifier.align(Alignment.CenterVertically),
                 )
@@ -118,8 +126,8 @@ actual fun EndGameMenu(
                         //Save permanent data
                         createScoutMatchDataFile(context, match.value, team.intValue, createOutput(team, robotStartPosition))
                     } else {
+                        saveDataSit.value = saveDataSituation.NEXT_MATCH
                         saveDataPopup.value = true
-                        saveDataSit.value = false
                     }
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 10.dp)

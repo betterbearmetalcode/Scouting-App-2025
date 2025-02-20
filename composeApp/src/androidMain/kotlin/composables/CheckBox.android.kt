@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,9 +15,14 @@ import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import getCurrentTheme
+import nodes.TeamMatchStartKey
 import nodes.autoStop
-import nodes.redoList
+import nodes.hasDuplicateMatchandTeamData
+import nodes.overwritePopup
 import nodes.saveData
+import nodes.saveDataSit
+import nodes.saveDataSituation
+import nodes.teamDataArray
 import nodes.undoList
 
 @Composable
@@ -67,7 +71,13 @@ actual fun TriStateCheckBox(
                 textColor.value = Color.White
             }
 
+            saveDataSit.value = saveDataSituation.BUTTON
             saveData.value = true
+            if(!hasDuplicateMatchandTeamData()) {
+                saveData.value = true
+            } else {
+                overwritePopup.value = true
+            }
         },
         contentPadding = PaddingValues(5.dp, 5.dp),
         modifier = modifier

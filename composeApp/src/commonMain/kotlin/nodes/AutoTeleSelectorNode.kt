@@ -20,7 +20,6 @@ import compKey
 import composables.MainMenuAlertDialog
 import pages.AutoTeleSelectorMenuBottom
 import pages.AutoTeleSelectorMenuTop
-import java.util.*
 import java.util.Stack
 import java.util.Objects
 
@@ -114,8 +113,22 @@ class TeamMatchStartKey(
 }
 
 var saveData = mutableStateOf(false)
+fun hasDuplicateMatchandTeamData() :Boolean {
+    for ((key) in teamDataArray) {
+        for ((key2) in teamDataArray) {
+            if (key.team == key2.team && key.match == key2.match && key.robotStartPosition != key2.robotStartPosition) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
+enum class saveDataSituation { MAIN, NEXT_MATCH, BUTTON, NONE }
+var saveDataSit = mutableStateOf(saveDataSituation.NONE) // False = nextMatch, True = MainMenu
+
 var saveDataPopup = mutableStateOf(false)
-var saveDataSit = mutableStateOf(false) // False = nextMatch, True = MainMenu
+var overwritePopup = mutableStateOf(false)
 
 var undoList = Stack<Array<Any>>()
 var redoList = Stack<Array<Any>>()
@@ -169,6 +182,8 @@ var notes = mutableStateOf("")
 
 
 fun createOutput(team: MutableIntState, robotStartPosition: MutableIntState): String {
+
+    println("saved Data")
 
     fun stateToInt(state: ToggleableState) = when (state) {
         ToggleableState.Off -> 0

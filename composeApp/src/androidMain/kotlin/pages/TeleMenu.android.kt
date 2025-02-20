@@ -209,7 +209,12 @@ actual fun TeleMenu(
                         .fillMaxWidth()
                 )
                 if(lostComms.value != 0) {
-                    saveData.value = true
+                    saveDataSit.value = saveDataSituation.BUTTON
+                    if(!hasDuplicateMatchandTeamData()) {
+                        saveData.value = true
+                    } else {
+                        overwritePopup.value = true
+                    }
                 }
             }
         }
