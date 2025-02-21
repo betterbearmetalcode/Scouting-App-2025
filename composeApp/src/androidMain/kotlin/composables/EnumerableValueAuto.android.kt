@@ -20,12 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import getCurrentTheme
-import nodes.hasDuplicateMatchandTeamData
-import nodes.overwritePopup
 import nodes.redoList
 import nodes.saveData
 import nodes.saveDataSit
-import nodes.saveDataSituation
 import nodes.undoList
 
 @Composable
@@ -49,12 +46,7 @@ actual fun EnumerableValueAuto(
             undoList.push(arrayOf("number" ,value, value.value))
             value.value += 1
             redoList.push(arrayOf("number" ,value, value.value))
-            saveDataSit.value = saveDataSituation.BUTTON
-            if(!hasDuplicateMatchandTeamData()) {
-                saveData.value = true
-            } else {
-                overwritePopup.value = true
-            }
+            saveData.value = true
         },
         interactionSource = interact,
         contentPadding = PaddingValues(5.dp, 5.dp),

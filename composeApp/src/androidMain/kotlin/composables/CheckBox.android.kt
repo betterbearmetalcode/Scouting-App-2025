@@ -17,11 +17,8 @@ import androidx.compose.ui.unit.sp
 import getCurrentTheme
 import nodes.TeamMatchStartKey
 import nodes.autoStop
-import nodes.hasDuplicateMatchandTeamData
-import nodes.overwritePopup
 import nodes.saveData
 import nodes.saveDataSit
-import nodes.saveDataSituation
 import nodes.teamDataArray
 import nodes.undoList
 
@@ -70,14 +67,8 @@ actual fun TriStateCheckBox(
                 backgroundColor.value = Color.Black
                 textColor.value = Color.White
             }
-
-            saveDataSit.value = saveDataSituation.BUTTON
+            
             saveData.value = true
-            if(!hasDuplicateMatchandTeamData()) {
-                saveData.value = true
-            } else {
-                overwritePopup.value = true
-            }
         },
         contentPadding = PaddingValues(5.dp, 5.dp),
         modifier = modifier

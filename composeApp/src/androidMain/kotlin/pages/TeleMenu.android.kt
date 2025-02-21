@@ -228,12 +228,7 @@ actual fun TeleMenu(
                         .fillMaxWidth()
                 )
                 if(lostComms.value != 0) {
-                    saveDataSit.value = saveDataSituation.BUTTON
-                    if(!hasDuplicateMatchandTeamData()) {
-                        saveData.value = true
-                    } else {
-                        overwritePopup.value = true
-                    }
+                    saveData.value = true
                 }
             }
         }

@@ -438,7 +438,7 @@ actual fun AutoTeleSelectorMenuBottom(
             shape = RoundedCornerShape(1.dp),
             colors = ButtonDefaults.buttonColors(containerColor = defaultSecondary),
             onClick = {
-                saveDataSit.value = saveDataSituation.MAIN
+                saveDataSit.value = true
                 mainMenuDialog.value = true
             },
             modifier = Modifier.fillMaxWidth()
@@ -475,24 +475,18 @@ actual fun AutoTeleSelectorMenuBottom(
                 )
                 androidx.compose.material.OutlinedButton(
                     onClick = {
-                        if(!hasDuplicateMatchandTeamData()) {
-                            if (saveDataSit.value == saveDataSituation.MAIN) {
-                                teamDataArray[TeamMatchStartKey(parseInt(match.value), team.intValue, robotStartPosition.intValue)] = createOutput(team, robotStartPosition)
-                                createScoutMatchDataFile(context, match.value, team.intValue, createOutput(team, robotStartPosition))
-                                mainMenuBackStack.pop()
-                            } else if (saveDataSit.value == saveDataSituation.NEXT_MATCH) {
-                                teamDataArray[TeamMatchStartKey(parseInt(match.value), team.intValue, robotStartPosition.intValue)] = createOutput(team, robotStartPosition)
-                                createScoutMatchDataFile(context, match.value, team.intValue, createOutput(team, robotStartPosition))
-                                match.value = (parseInt(match.value) + 1).toString()
-                                reset()
-                                backStack.push(AutoTeleSelectorNode.NavTarget.AutoScouting)
-                            }
+                        if (saveDataSit.value == true) {
+                            teamDataArray[TeamMatchStartKey(parseInt(match.value), team.intValue, robotStartPosition.intValue)] = createOutput(team, robotStartPosition)
+                            createScoutMatchDataFile(context, match.value, team.intValue, createOutput(team, robotStartPosition))
+                            mainMenuBackStack.pop()
+                        } else if (saveDataSit.value == false) {
+                            teamDataArray[TeamMatchStartKey(parseInt(match.value), team.intValue, robotStartPosition.intValue)] = createOutput(team, robotStartPosition)
+                            createScoutMatchDataFile(context, match.value, team.intValue, createOutput(team, robotStartPosition))
+                            match.value = (parseInt(match.value) + 1).toString()
+                            reset()
+                            backStack.push(AutoTeleSelectorNode.NavTarget.AutoScouting)
                         }
-                        if(!hasDuplicateMatchandTeamData()) {
-                            saveData.value = true
-                        } else {
-                            overwritePopup.value = true
-                        }
+                        saveData.value = true
                         saveDataPopup.value = false
                     },
                     border = BorderStroke(2.dp, getCurrentTheme().secondaryVariant),
@@ -503,15 +497,13 @@ actual fun AutoTeleSelectorMenuBottom(
                 }
                 androidx.compose.material.OutlinedButton(
                     onClick = {
-                        if(!hasDuplicateMatchandTeamData()) {
-                            println("does not have duplicate data")
-                            if (saveDataSit.value == saveDataSituation.MAIN) {
-                                mainMenuBackStack.pop()
-                            } else if (saveDataSit.value == saveDataSituation.NEXT_MATCH) {
-                                match.value = (parseInt(match.value) + 1).toString()
-                                reset()
-                                backStack.push(AutoTeleSelectorNode.NavTarget.AutoScouting)
-                            }
+                        println("does not have duplicate data")
+                        if (saveDataSit.value == true) {
+                            mainMenuBackStack.pop()
+                        } else if (saveDataSit.value ==  false) {
+                            match.value = (parseInt(match.value) + 1).toString()
+                            reset()
+                            backStack.push(AutoTeleSelectorNode.NavTarget.AutoScouting)
                         }
                         saveDataPopup.value = false
                         saveData.value = false
@@ -521,81 +513,6 @@ actual fun AutoTeleSelectorMenuBottom(
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Text(text = "No", color = getCurrentTheme().error)
-                }
-            }
-        }
-    }
-
-    if(overwritePopup.value) {
-        BasicAlertDialog(
-            onDismissRequest = {  },
-            modifier = Modifier.clip(
-                RoundedCornerShape(5.dp)
-            ).border(BorderStroke(3.dp, getCurrentTheme().primaryVariant), RoundedCornerShape(5.dp))
-                .background(getCurrentTheme().secondary)
-        ) {
-            Box(modifier = Modifier.fillMaxWidth(8f / 10f).padding(5.dp).fillMaxHeight(2/8f)) {
-                Text(text = "You have another record of the same match data and team data, but not the same start position. Do you want to overwrite that record with this data or delete this record and keep the other one?",
-                    modifier = Modifier.padding(5.dp).align(Alignment.TopCenter)
-                )
-                androidx.compose.material.OutlinedButton(
-                    onClick = {
-                        if(saveDataSit.value == saveDataSituation.MAIN) {
-                            teamDataArray[TeamMatchStartKey(parseInt(match.value), team.intValue, robotStartPosition.intValue)] = createOutput(team, robotStartPosition)
-                            createScoutMatchDataFile(context, match.value, team.intValue, createOutput(team, robotStartPosition))
-                            mainMenuBackStack.pop()
-                        } else if (saveDataSit.value == saveDataSituation.NEXT_MATCH) {
-                            teamDataArray[TeamMatchStartKey(parseInt(match.value), team.intValue, robotStartPosition.intValue)] = createOutput(team, robotStartPosition)
-                            createScoutMatchDataFile(context, match.value, team.intValue, createOutput(team, robotStartPosition))
-                            match.value = (parseInt(match.value) + 1).toString()
-                            reset()
-                            backStack.push(AutoTeleSelectorNode.NavTarget.AutoScouting)
-                        } else if (saveDataSit.value == saveDataSituation.BUTTON) {
-                            overwritePopup.value = false
-                        }
-
-                        for((key, value) in teamDataArray.entries) {
-                            if (key.team == team.intValue && key.match == parseInt(match.value) && key.robotStartPosition != robotStartPosition.intValue) {
-                                teamDataArray.remove(TeamMatchStartKey(key.match, key.team, key.robotStartPosition))
-                            }
-                        }
-
-                        overwritePopup.value = false
-                        if(!hasDuplicateMatchandTeamData()) {
-                            saveData.value = true
-                        } else {
-                            overwritePopup.value = true
-                        }
-                    },
-                    border = BorderStroke(2.dp, getCurrentTheme().secondaryVariant),
-                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(backgroundColor = getCurrentTheme().secondary, contentColor = getCurrentTheme().onSecondary),
-                    modifier = Modifier.align(Alignment.BottomStart)
-                ) {
-                    Text(text = "Overwrite", color = getCurrentTheme().error)
-                }
-                androidx.compose.material.OutlinedButton(
-                    onClick = {
-                        saveData.value = false
-                        teamDataArray.remove(TeamMatchStartKey(parseInt(match.value), team.intValue, robotStartPosition.intValue))
-                        reset()
-
-                        if(saveDataSit.value == saveDataSituation.MAIN) {
-                            mainMenuBackStack.pop()
-                        } else if(saveDataSit.value == saveDataSituation.NEXT_MATCH) {
-                            match.value = (parseInt(match.value) + 1).toString()
-                            reset()
-                            backStack.push(AutoTeleSelectorNode.NavTarget.AutoScouting)
-                        } else if (saveDataSit.value == saveDataSituation.BUTTON) {
-                            overwritePopup.value = false
-                        }
-
-                        overwritePopup.value = false
-                    },
-                    border = BorderStroke(2.dp, getCurrentTheme().secondaryVariant),
-                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(backgroundColor = getCurrentTheme().secondary, contentColor = getCurrentTheme().onSecondary),
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                ) {
-                    Text(text = "Delete this data", color = getCurrentTheme().error)
                 }
             }
         }

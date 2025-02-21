@@ -45,11 +45,8 @@ import nodes.autoStop
 import nodes.createOutput
 import nodes.groundCollectionAlgae
 import nodes.groundCollectionCoral
-import nodes.hasDuplicateMatchandTeamData
-import nodes.overwritePopup
 import nodes.saveData
 import nodes.saveDataSit
-import nodes.saveDataSituation
 import nodes.teamDataArray
 import java.lang.Integer.parseInt
 
@@ -269,12 +266,7 @@ actual fun AutoMenu(
                         .fillMaxWidth()
                 )
                 if(autoStop.value != 0) {
-                    saveDataSit.value = saveDataSituation.BUTTON
-                    if(!hasDuplicateMatchandTeamData()) {
-                        saveData.value = true
-                    } else {
-                        overwritePopup.value = true
-                    }
+                    saveData.value = true
                 }
             }
 

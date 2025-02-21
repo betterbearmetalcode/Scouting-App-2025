@@ -20,11 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defaultBackgroundVariant
 import defaultOnPrimary
-import nodes.hasDuplicateMatchandTeamData
-import nodes.overwritePopup
 import nodes.saveData
 import nodes.saveDataSit
-import nodes.saveDataSituation
 
 @Composable
 actual fun Cage(
@@ -44,11 +41,7 @@ actual fun Cage(
         onClick = {
             isDeep.value = !isDeep.value
 
-            if(!hasDuplicateMatchandTeamData()) {
-                saveData.value = true
-            } else {
-                overwritePopup.value = true
-            }
+            saveData.value = true
         },
         border = BorderStroke(3.dp, Color.Yellow),
         shape = RoundedCornerShape(25.dp),
@@ -72,12 +65,7 @@ actual fun Cage(
                     cageChecked1.value = ToggleableState.Off
                     cageChecked2.value = ToggleableState.Off
 
-                    saveDataSit.value = saveDataSituation.BUTTON
-                    if(!hasDuplicateMatchandTeamData()) {
-                        saveData.value = true
-                    } else {
-                        overwritePopup.value = true
-                    }
+                    saveData.value = true
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
