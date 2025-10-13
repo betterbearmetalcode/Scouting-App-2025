@@ -59,7 +59,8 @@ actual fun LoginMenu(
         "2025waahs",
         "2025pncmp",
         "2025hop",
-        "2025cc"
+        "2025cc",
+        "2025wagg"
     )
 
     // Cannot get robotStartPosition variable in rootnode from FileMaker.kt, so doing some logic here:
@@ -228,6 +229,25 @@ actual fun LoginMenu(
                                 modifier = Modifier.background(color = getCurrentTheme().onSurface)
                             )
                         }
+                    )
+                    DropdownMenuItem(
+                            onClick = {
+                                if (comp.value != "Girls Gen") {
+                                    comp.value = "Girls Gen"
+                                    compKey = tbaMatches[6]
+//                            teamData?.clear()
+//                            matchData?.clear()
+                                }
+                                compDD = false
+
+                            },
+                    text = {
+                        Text(
+                            text = "Girls Gen",
+                            color = getCurrentTheme().onPrimary,
+                            modifier = Modifier.background(color = getCurrentTheme().onSurface)
+                        )
+                    }
                     )
                     OutlinedTextField(
                         value = comp.value,
